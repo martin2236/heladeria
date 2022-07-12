@@ -1,14 +1,15 @@
 <template>
   <v-app id="inspire">
-    <h1>Categorias</h1>
+    <h1 >Categorias</h1>
     <v-container id="inspire">
       <v-row>
         <v-col md="6">
           <v-hover>
             <template v-slot:default="{ hover }">
-              <v-card class="mx-auto" max-width="700">
+              <v-card  max-width="700px" max-height="1200px">
                 <v-img
-                  src="https://cdn.vuetifyjs.com/images/cards/forest-art.jpg"
+                  src="../assets/bolas.jpg"
+                   height="500px"
                 ></v-img>
 
                 <v-card-text>
@@ -43,7 +44,8 @@
             <template v-slot:default="{ hover }">
               <v-card class="mx-auto" max-width="700">
                 <v-img
-                  src="https://cdn.vuetifyjs.com/images/cards/forest-art.jpg"
+                  src="../assets/conos.jpg"
+                   height="500px"
                 ></v-img>
 
                 <v-card-text>
@@ -101,4 +103,7 @@ export default {
 </script>
 
 <style>
+h1{
+  text-align: center;
+}
 </style>

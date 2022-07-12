@@ -4,7 +4,7 @@ module.exports = {
   ],
  
     pwa: {
-      name: 'My App',
+      name: 'Heladerias',
       themeColor: '#4DBA87',
       msTileColor: '#000000',
       workboxPluginMode: 'GenerateSW',
