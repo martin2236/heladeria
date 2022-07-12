@@ -1,149 +1,86 @@
 <template>
-<v-app> 
-    <div id="map" style="height: 570px; width: 100%"></div>
- 
-</v-app>
-
-         
+<v-container>
+    <v-row>
+        <v-col md="12">
   
+  <div class="container">
+    <l-map
+      ref="map"
+      class="map-container "
+      :zoom="zoom"
+      :center="center"
+      @update:zoom="zoomUpdated"
+      @update:center="centerUpdated"
+      @update:bounds="boundsUpdated"
+      @click="addMarker"
+    >
+      <l-tile-layer :url="url"></l-tile-layer>
+      <l-draw-toolbar position="topright"></l-draw-toolbar>
+     </l-map>
+    <div>zoom: {{zoom}}, center: {{center}} , coordenadas {{coordenadas}}</div>
+  </div>
+ 
+        </v-col>
+    </v-row>
+  </v-container>
 </template>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3/leaflet.draw.js"></script>
-<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet-src.js"></script>
+
 <script>
-
+import { LMap, LTileLayer } from "vue2-leaflet";
+import LDrawToolbar from "vue2-leaflet-draw-toolbar";
+import 'leaflet/dist/leaflet.css';
+import "leaflet/dist/images/marker-shadow.png";
 export default {
-
-
- mounted() {
-     
-    var cont = 0;
-    localStorage.cont = cont;
-    var urlcalle = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
-    var urlsatelite =
-      "//server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
-
-    //draw your marker/circle/polygon/rectangle, the coordinates will be displayed in the console
-    var map = L.map("map", {
-    fullscreenControl: true,
-    // OR
-    fullscreenControl: {
-        pseudoFullscreen: false // if true, fullscreen to page width and height
-    }
-}).setView([-36.53, -56.7], 10);
-
-    var thunder = L.tileLayer("https://{s}.tile.thunderforest.com/transport-dark/{z}/{x}/{y}.png?apikey=20303d5f3ecb4dcc910dae86c45b649e", {
-      attribution:
-        '&copy; <a href="http://osm.org/copyright">OpenStreetMap<\/a> Informática',
-    });
-
-    var osmBase = L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
-      attribution:
-        '&copy; <a href="http://osm.org/copyright">OpenStreetMap<\/a> Informática',
-    });
-    osmBase.addTo(map);
-     var dark=L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
-      layers: "Satelite",
-
-      attribution:
-        '<a href="https://www.sedecatastro.gob.es/"" target="_blank">Informática</a>',
-    });
-    var Satelite = L.tileLayer(urlsatelite, {
-      layers: "Satelite",
-
-      attribution:
-        '<a href="https://www.sedecatastro.gob.es/"" target="_blank">Informática</a>',
-    });
-    var baseMaps = {
-      Calle: osmBase,
-      Satelite: Satelite,
-      Dark:dark,
-      Thunder:thunder,
+  components: { LMap, LTileLayer, LDrawToolbar },
+  data() {
+    return {
+      marcadores:[],
+      url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      zoom: 10,
+      center: [-36.4882488, -56.7050737],
+      bounds: null,
+      coordenadas: [],
     };
-    L.control.layers(baseMaps, {}).addTo(map);
-
-    var drawnItems = new L.FeatureGroup();
-    map.addLayer(drawnItems);
-
-    // Initialise the draw control and pass it the FeatureGroup of editable layers
-    var drawControl = new L.Control.Draw({
-      edit: {
-        featureGroup: drawnItems,
-      },
-    });
-
-    map.addControl(drawControl);
-    var coordenadasinsertar=new Array();
-    var coordenadas =JSON.parse( localStorage.coordenadaspadre );
-
-    console.log( JSON.parse( localStorage.coordenadaspadre ))
-
-    var markerClusters = L.markerClusterGroup();
-    coordenadas.forEach((element) => {
-      console.log(element.lat);
-      var marker = L.marker([element.lat, element.lng]);
-      //  marker.addTo(map);
-      markerClusters.addLayer(marker);
-    });
-    map.addLayer(markerClusters);
-
-    if(coordenadasinsertar!=null){
-
-    }
-
-    map.on(L.Draw.Event.CREATED, function(e) {
-      localStorage.cont = cont;
-      cont++;
-      console.clear();
-      var type = e.layerType;
-      var layer = e.layer;
-      //  console.log(layer);
-      //  console.log(type);
-      drawnItems.addLayer(layer);
-
-      area(type, layer);
-      // Do whatever else you need to. (save to db, add to map etc)
-
-      console.log("Coordinates:");
-
-      if (type == "marker" || type == "circle" || type == "circlemarker") {
-        console.log([layer.getLatLng().lat, layer.getLatLng().lng]);
-      } else {
-        var objects = layer.getLatLngs()[0];
-        for (var i = 0; i < objects.length; i++) {
-          console.log([objects[i].lat, objects[i].lng]);
-        }
-      }
-    });
-
-    function area(figura, capa) {
-      var miObjeto = new Array();
-      if (
-        figura != "marker" &&
-        figura != "circle" &&
-        figura != "circlemarker"
-      ) {
-        var seeArea = L.GeometryUtil.geodesicArea(capa.getLatLngs()[0]);
-        console.log(seeArea);
-        localStorage.area = seeArea;
-      } else {
-        coordenadasinsertar.push({ lat: capa.getLatLng().lat, lng: capa.getLatLng().lng });
-        localStorage.insert=(coordenadasinsertar)
-        localStorage.setItem("datos", JSON.stringify(miObjeto));
-      }
-
-      // Guardo el objeto como un string
-
-      var guardado = localStorage.getItem("datos");
-
-      console.log("objetoObtenido: ", coordenadasinsertar);
-    }
-    
   },
-}
+  methods: {
+    zoomUpdated(zoom) {
+      this.zoom = zoom;
+    },
+    centerUpdated(center) {
+      this.center = center;
+    },
+    boundsUpdated(bounds) {
+      this.bounds = bounds;
+    },
+     addMarker(event) {
+      this.marcadores = [];
+      this.marcadores.push({ pos: event.latlng, desc: "" });
+
+       console.log(this.marcadores);
+       this.coordenadas.push({latitud:this.marcadores[0].pos.lat, longitud:this.marcadores[0].pos.lng})
+  
+    },
+  }
+};
 </script>
 
 <style>
+@import "~leaflet/dist/leaflet.css";
+.container {
+ height: 100%;
+ display: -webkit-box;
+ display: -ms-flexbox;
+ display: flex;
+ -webkit-box-orient: vertical;
+ -webkit-box-direction: normal;
+     -ms-flex-direction: column;
+         flex-direction: column;
+}
+.map-container {
+  height: 100%;
+  /* Fallback for vmin */
+  padding: 0px 1rem 1rem 1rem;
+  padding: 0px 1vmin 1vmin 1vmin;
+}
 
 </style>

@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import Listado from '../views/Listado.vue'
 import Home from '../views/Home.vue'
 import Categorias from '../views/Categorias.vue'
-// import PoligonoMapa from '../views/PoligonoMapa.vue'
+import Mapa from '../views/PoligonoMapa'
 
 Vue.use(VueRouter)
 
@@ -19,15 +19,16 @@ const routes = [
     component: Listado
   },
   {
+    path: '/mapa',
+    name: 'Mapa',
+    component: Mapa
+  },
+  {
     path: '/categorias',
     name: 'Categorias',
     component: Categorias
   },
-  {
-    path: '/listado',
-    name: 'Listado',
-    component: PoligonoMapa
-  }
+  
   
 ]
 
