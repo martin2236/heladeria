@@ -9,6 +9,15 @@ import '@mdi/font/css/materialdesignicons.css'
 import "leaflet/dist/leaflet.css";
 import "leaflet/dist/images/marker-shadow.png";
 import { Icon } from 'leaflet';
+import GAuth from "vue-google-oauth2";
+
+Vue.use(GAuth, {
+  clientId:
+    "397868679080-qanvqc32fiftuirc4prlnn03c5l1o7en.apps.googleusercontent.com",
+  scope: "email",
+  prompt: "select_account",
+  fetch_basic_profile: false
+});
 
 delete Icon.Default.prototype._getIconUrl;
 Icon.Default.mergeOptions({

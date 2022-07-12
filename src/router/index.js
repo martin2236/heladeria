@@ -4,6 +4,7 @@ import Listado from '../views/Listado.vue'
 import Home from '../views/Home.vue'
 import Categorias from '../views/Categorias.vue'
 import Mapa from '../views/PoligonoMapa'
+import Registro from '../components/Registro.vue'
 
 Vue.use(VueRouter)
 
@@ -27,6 +28,11 @@ const routes = [
     path: '/categorias',
     name: 'Categorias',
     component: Categorias
+  },
+  {
+    path: '/registro',
+    name: 'Registro',
+    component: Registro
   },
   
   
