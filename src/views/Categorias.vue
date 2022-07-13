@@ -1,8 +1,6 @@
 <template>
   <v-app id="inspire">
     <h1>Categorias</h1>
- 
-        <router-link to="/registro">Registrarse</router-link> 
     <v-container id="inspire">
       <v-row>
         <v-col md="6">

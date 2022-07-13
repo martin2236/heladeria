@@ -9,14 +9,19 @@ import '@mdi/font/css/materialdesignicons.css'
 import "leaflet/dist/leaflet.css";
 import "leaflet/dist/images/marker-shadow.png";
 import { Icon } from 'leaflet';
-import GAuth from "vue-google-oauth2";
+import { Auth0Plugin } from './auth';
+import { domain, clientId } from '../auth_config.json';
 
-Vue.use(GAuth, {
-  clientId:
-    "397868679080-qanvqc32fiftuirc4prlnn03c5l1o7en.apps.googleusercontent.com",
-  scope: "email",
-  prompt: "select_account",
-  fetch_basic_profile: false
+Vue.use(Auth0Plugin, {
+    domain,
+    clientId,
+    onRedirectCallback: appState => {
+        router.push(
+            appState && appState.targetUrl
+                ? appState.targetUrl
+                : window.location.pathname
+        );
+    }
 });
 
 delete Icon.Default.prototype._getIconUrl;
@@ -31,5 +36,6 @@ new Vue({
   router,
   store,
   vuetify,
+  
   render: h => h(App)
 }).$mount('#app')

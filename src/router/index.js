@@ -4,7 +4,7 @@ import Listado from '../views/Listado.vue'
 import Home from '../views/Home.vue'
 import Categorias from '../views/Categorias.vue'
 import Mapa from '../views/PoligonoMapa'
-import Registro from '../components/Registro.vue'
+import { authGuard } from '../auth/authGuard';
 
 Vue.use(VueRouter)
 
@@ -30,10 +30,12 @@ const routes = [
     component: Categorias
   },
   {
-    path: '/registro',
-    name: 'Registro',
-    component: Registro
-  },
+      path: '/registro',
+      name: 'Registro',
+        component: () =>
+            import(/* webpackChunkName: "about" */ '../views/Registro.vue'),
+        beforeEnter: authGuard
+    }
   
   
 ]
