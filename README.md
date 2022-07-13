@@ -26,6 +26,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 prueba
 
+https://manage.auth0.com/dashboard/us/dev-dmk9ege0/applications/XFKP2QLJzebWJ0aM9qbknI1pm99oJWcx/settings
 
 https://manage.auth0.com/dashboard/us/dev-dmk9ege0/
 

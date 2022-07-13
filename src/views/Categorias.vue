@@ -70,6 +70,7 @@
           </v-hover></v-col
         >
       </v-row>
+   
     </v-container>
   </v-app>
 </template>
@@ -78,7 +79,7 @@
 
 export default {
   components: {
-   
+  
   },
   data: () => ({
     latitud: 0,
