@@ -37,6 +37,7 @@ export const useAuth0 = ({
                     this.user = await this.auth0Client.getUser();
                     this.isAuthenticated = await this.auth0Client.isAuthenticated();
                     this.error = null;
+                    console.log(this.user);
                 } catch (e) {
                     console.error(e);
                     this.error = e;
