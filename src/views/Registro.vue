@@ -1,5 +1,5 @@
 <template>
     <div class="about">
-        <h1>This is an Registro page</h1>
+        <h1>This is an Registro page esd</h1>
     </div>
 </template>

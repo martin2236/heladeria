@@ -70,16 +70,16 @@
           </v-hover></v-col
         >
       </v-row>
-   
+         <Ruta/>
     </v-container>
   </v-app>
 </template>
 
 <script>
-
+import Ruta from '../components/Ruta.vue'
 export default {
   components: {
-  
+        Ruta
   },
   data: () => ({
     latitud: 0,
@@ -97,6 +97,7 @@ export default {
     mostrarUbicacion() {
       this.latitud = this.coordenadas.coords.latitude;
       this.longitud = this.coordenadas.coords.longitude;
+      this.$store.state.coordenadasUsuario.push({latitud: this.latitud,longitud: this.longitud});
       console.log(this.latitud + " " + this.longitud + " ");
     },
   },

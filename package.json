@@ -12,6 +12,7 @@
     "@mdi/font": "5.9.55",
     "core-js": "^3.6.5",
     "leaflet": "^1.8.0",
+    "leaflet-routing-machine": "^3.2.12",
     "register-service-worker": "^1.7.1",
     "roboto-fontface": "*",
     "sweetalert": "^2.1.2",
