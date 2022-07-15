@@ -70,13 +70,24 @@
           </v-hover></v-col
         >
       </v-row>
-         <Ruta/>
+         <div  id="app">
+    <l-map :zoom="zoom" :center="center">
+      <l-tile-layer
+        :url="osmUrl"
+        :attribution="attribution"/>
+      <l-routing-machine :language="language" :waypoints="waypoints"/>
+    </l-map>
+     <br><br><br>
+   
+  </div>
+         <Ruta v-if="abreMapa"></Ruta>
     </v-container>
   </v-app>
 </template>
 
 <script>
-import Ruta from '../components/Ruta.vue'
+import Ruta from '../components/MapaRuta.vue'
+
 export default {
   components: {
         Ruta
@@ -85,6 +96,7 @@ export default {
     latitud: 0,
     longitud: 0,
     coordenadas: [],
+    abreMapa:false,
   }),
   created() {
     navigator.geolocation.getCurrentPosition(
@@ -97,14 +109,24 @@ export default {
     mostrarUbicacion() {
       this.latitud = this.coordenadas.coords.latitude;
       this.longitud = this.coordenadas.coords.longitude;
+      sessionStorage.lat=this.latitud
+      sessionStorage.lng=-this.longitud
+
       this.$store.state.coordenadasUsuario.push({latitud: this.latitud,longitud: this.longitud});
       console.log(this.latitud + " " + this.longitud + " ");
+      this.abreMapa=true
     },
   },
 };
 </script>
 
 <style>
+
+
+html, body, #app {
+  height: 100%;
+  margin: 0;
+}
 h1 {
   text-align: center;
 }
