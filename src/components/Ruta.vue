@@ -32,9 +32,9 @@ export default {
       ],
     };
   },
-  mounted() {
-    this. buscaRuta()
-  },
+//   mounted() {
+//     this. buscaRuta()
+//   },
   methods: {
     buscaRuta() {
       console.log(this.$store.state.coordenadasUsuario[0].latitud);
