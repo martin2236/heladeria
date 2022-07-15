@@ -64,10 +64,10 @@
 </template>
 
 <script>
-import App2 from './App2.vue'
+
 export default {
     name: 'App',
-    components:{ App2},
+    components:{ },
     methods: {
         login() {
             this.$auth.loginWithRedirect();

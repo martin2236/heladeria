@@ -70,27 +70,18 @@
           </v-hover></v-col
         >
       </v-row>
-         <div  id="app">
-    <l-map :zoom="zoom" :center="center">
-      <l-tile-layer
-        :url="osmUrl"
-        :attribution="attribution"/>
-      <l-routing-machine :language="language" :waypoints="waypoints"/>
-    </l-map>
-     <br><br><br>
-   
-  </div>
-         <Ruta v-if="abreMapa"></Ruta>
+    
+         <InserCoorCom v-if="abreMapa"></InserCoorCom>
     </v-container>
   </v-app>
 </template>
 
 <script>
-import Ruta from '../components/MapaRuta.vue'
+import InserCoorCom from '../components/InsertCoorCom.vue'
 
 export default {
   components: {
-        Ruta
+       InserCoorCom
   },
   data: () => ({
     latitud: 0,

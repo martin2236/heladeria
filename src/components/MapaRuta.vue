@@ -9,7 +9,7 @@
 <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet-src.js"></script>
 <script>
 import L from "leaflet";
-
+const waypoints = new Array()
 export default {
     data: {
     waypoints:[]
@@ -20,16 +20,16 @@ export default {
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: "© OpenStreetMap contributors",
     }).addTo(map);
-
+    console.log(sessionStorage.lat+ '' +sessionStorage.lng)
     var router = L.Routing.control({
-      waypoints: [L.latLng(sessionStorage.lng, sessionStorage.lat), L.latLng(-34.57, -58.42)],
+      waypoints: [L.latLng(sessionStorage.lat, sessionStorage.lng), L.latLng(-36.49543124960607, -56.700707674026496)],
       language: "es",
       routeWhileDragging: true,
     }).addTo(map);
   },
 };
 </script>
-
+//-36.49543124960607, "longitud": -56.700707674026496
 <style>
 .map {
   position: absolute;
