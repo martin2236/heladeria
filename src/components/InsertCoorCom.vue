@@ -40,10 +40,10 @@ export default {
     guarda() {
       sessionStorage.removeItem("lat");
       sessionStorage.removeItem("lng");
-      alert(sessionStorage.lat);
+    
       sessionStorage.lat = this.latitud;
       sessionStorage.lng = this.longitud;
-      alert(sessionStorage.lat);
+   
     },
     abre() {
       this.bandera = true;
