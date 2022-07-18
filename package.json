@@ -8,10 +8,20 @@
     "test:e2e": "vue-cli-service test:e2e"
   },
   "dependencies": {
+    "@auth0/auth0-vue": "^1.0.2",
+    "@mdi/font": "5.9.55",
     "core-js": "^3.6.5",
+    "leaflet": "^1.8.0",
+    "leaflet-routing-machine": "^3.2.12",
     "register-service-worker": "^1.7.1",
+    "roboto-fontface": "*",
+    "sweetalert": "^2.1.2",
     "vue": "^2.6.11",
+    "vue-google-oauth2": "^1.5.8",
     "vue-router": "^3.2.0",
+    "vue2-leaflet": "^2.7.1",
+    "vue2-leaflet-draw-toolbar": "^0.1.1",
+    "vuetify": "^2.6.0",
     "vuex": "^3.4.0"
   },
   "devDependencies": {
@@ -21,6 +31,10 @@
     "@vue/cli-plugin-router": "~4.5.15",
     "@vue/cli-plugin-vuex": "~4.5.15",
     "@vue/cli-service": "~4.5.15",
-    "vue-template-compiler": "^2.6.11"
+    "sass": "~1.32.0",
+    "sass-loader": "^10.0.0",
+    "vue-cli-plugin-vuetify": "~2.5.1",
+    "vue-template-compiler": "^2.6.11",
+    "vuetify-loader": "^1.7.0"
   }
 }
