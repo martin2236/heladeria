@@ -51,11 +51,11 @@
              </v-col>
            </v-card-text>
      </v-card>
-     <v-card class="mt-5">
+     <v-card class="mt-5 responsive">
          <v-card-title>
              Que estás buscando hoy?
          </v-card-title>
-         <v-card-text class="d-lg-flex d-md-flex d-sm-flex flex-lg-row flex-sm-column">
+         <v-card-text class="d-lg-flex d-md-flex d-sm-flex flex-lg-row flex-md-row  flex-sm-column">
           <v-col
             cols="12"
             lg="6"
@@ -165,7 +165,7 @@
              </v-col>
          </v-card-text>
      </v-card>
-     <v-card class="mt-5">
+     <v-card class="mt-5 responsive">
          <v-col class="d-flex flex-row justify-space-between align-center">
             <v-card-title class="ml-n3">
                 Heladerias mas visitadas
@@ -175,6 +175,7 @@
             text
             class="mx-0 px-0 mr-lg-5"
             color="primary"
+            to="heladerias"
             >
                 ver más
             </v-btn>
@@ -189,8 +190,8 @@
                 active-class="success"
                 >
                 <v-slide-item
-                    v-for="n in 15"
-                    :key="n"
+                    v-for="(n,id) in heladerias"
+                    :key="id"
                     v-slot="{ active, toggle }"
                 >
                     <v-card
@@ -201,12 +202,12 @@
                     @click="toggle"
                     >
                     <v-img
-                    src="../assets/hela1.jpg"
+                    :src="require(`../assets/heladerias/` + n.src)"
                     height="200"
                     width="200"
                     ></v-img>
-                    <h4 class="text-center">una heladeria</h4>
-                    <p class="text-center">San Bernardo</p>
+                    <h4 class="text-center">{{n.titulo}}</h4>
+                    <p class="text-center">{{n.ubicacion}}</p>
                     <p class="text-center">lun a dom - 9pm a 4am</p>
                     </v-card>
                 </v-slide-item>
@@ -327,8 +328,8 @@
          </v-card-text>
      </v-card>
      <v-card class="mt-5">
-         <v-card-title>Querés formar parte?</v-card-title>
-         <v-card-text class="d-lg-flex d-md-flex d-sm-flex flex-lg-row ">
+         <v-card-title class="">Querés formar parte?</v-card-title>
+         <v-card-text class="mt-lg-10  d-lg-flex d-md-flex d-sm-flex flex-lg-row ">
              <v-col 
              cols="12"
              lg="5"
@@ -336,7 +337,7 @@
              sm="5"
              >
             <v-img
-                class="mt-lg-5 ml-lg-15"
+                class="mt-lg-5 ml-lg-15 mb-lg-10"
                 height="250"
                 width="370"
                 src="../assets/heladeria2.jpg"
@@ -348,25 +349,78 @@
              lg="7"
              md="7"
              sm="7"
-             class="d-flex flex-column align-center"
+             class="d-flex flex-column align-center "
              >
                 <h2 class="text-center mt-5" style="font-size:40px; line-height:40px;">Vos también podés ser miembro de Helados ya!</h2>
                 <h4 class="text-center mt-5">Registra tu heladería y empeza a sumar clientes</h4>
                 <v-btn class="mt-5" color="primary">Quiero ser miembro</v-btn>
              </v-col>
          </v-card-text>
-
      </v-card>
+     
+        <bottom-tab class="bottomTab"/>
     </div>
 </template>
 
 <script>
-// @ is an alias to /src
-
-
+import BottomTab from '../components/BottomTab.vue'
 export default {
+components:{
+    BottomTab
+},
  data: () => ({
       model: null,
+      heladerias:[
+        {   
+            id:'1',
+            titulo:'Sabores',
+            src:'hela1.jpg',
+            ubicacion:'San clemanente'
+        },
+        {
+          id:'2',
+          titulo:'Bufala',
+          src:'bufala.jpg',
+          ubicacion:'Las toninas'
+        },
+         {
+          id:'3',
+          titulo:'Patito',
+          src:'patito.jpg',
+          ubicacion:'Santa Teresita'
+        },
+         {
+          id:'4',
+          titulo:'Plaza del castillo',
+          src:'plaza-del-castillo.jpg',
+          ubicacion:'San clemente'
+        },
+         {
+          id:'5',
+          titulo:'La gracia',
+          src:'la-gracia.jpg',
+          ubicacion:'San bernardo'
+        },
+         {
+          id:'6',
+          titulo:'Palazzo',
+          src:'palazzo.jpg',
+          ubicacion:'Las toninas'
+        },
+         {
+          id:'7',
+          titulo:'Bufala',
+          src:'bufala.jpg',
+          ubicacion:'Nueva atlantis'
+        },
+        {
+          id:'8',
+          titulo:'Vigo',
+          src:'vigo.jpg',
+          ubicacion:'Mar de ajó'
+        },
+        
+      ]
  })
 }
 </script>
@@ -415,7 +469,9 @@ export default {
         .logo-centro{
             margin-top: 20px;
         }
-        
+        .bottomTab{
+            display: none;
+        }
     }
 @media (min-width: 1100px) { 
 .v-text-field{
@@ -424,7 +480,13 @@ export default {
         .logo-centro{
             margin-top: 0px;
         }
+        
 
+}
+@media (max-width: 376px) { 
+    .responsive{
+        display: none;
+    }
 }
 
 </style>
