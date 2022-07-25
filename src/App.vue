@@ -24,14 +24,14 @@ export default {
 .ubicacion{
     font-size: 15px;
 }
- @media (min-width: 376px) { 
+ @media (min-width: 413px) { 
        
         .bottomTab{
             display: none;
         }
     }
  
-    @media (max-width: 376px) { 
+    @media (max-width: 413px) { 
         .titulo{
             display: none;
         }

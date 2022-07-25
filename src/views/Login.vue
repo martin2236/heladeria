@@ -90,7 +90,7 @@ data:()=>({
 </script>
 
 <style >
-    @media (max-width: 376px) { 
+    @media (max-width: 413px) { 
         .botonFace{
             margin-bottom: 20px !important;
         }

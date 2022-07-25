@@ -3,7 +3,7 @@
      <v-card 
      width="100%" 
      color="primary" 
-     class="mt-5 d-flex flex-column align-center justify-center">
+     class="mt-5 d-flex flex-column align-center justify-center" height="80vh">
          <v-card-title class="mt-8 text-center" style="font-size:30px; color:#ffffff; text-align:center;">
             <p> No esperes más pedí tus <span style="font-size:40px; font-weight:bold; margin-left:7px;"> Helados ya!</span></p>
         </v-card-title>
@@ -446,9 +446,11 @@ components:{
   position: absolute;
   width: 100%;
 }
-@media (max-width: 376px) { 
-        .v-text-field{
-            width: 90%;
+
+@media (max-width: 413px) { 
+        
+        .responsive{
+            display: none;
         }
         
         .titulo-2{
@@ -462,10 +464,11 @@ components:{
             height: 240px;
         }
      }
-     @media (min-width: 376px) { 
+     @media (min-width: 413px) { 
          .titulo-2{
             text-align: center;
         }
+        
         .logo-centro{
             margin-top: 20px;
         }
@@ -483,10 +486,11 @@ components:{
         
 
 }
-@media (max-width: 376px) { 
-    .responsive{
-        display: none;
-    }
+@media (max-width: 1100px) { 
+    .v-text-field[data-v-fae5bece] {
+            width: 80%;
+        }
+    
 }
 
 </style>
