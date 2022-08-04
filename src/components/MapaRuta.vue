@@ -16,10 +16,22 @@ export default {
   },
   mounted() {
     var map = L.map("map");
-   
+    var LeafIcon = L.Icon.extend({
+      options: {
+        iconSize: [38, 95],
+        shadowSize: [50, 64],
+        iconAnchor: [22, 94],
+        shadowAnchor: [4, 62],
+        popupAnchor: [-3, -76],
+      },
+    });
+    var greenIcon = new LeafIcon({
+      iconUrl: "http://leafletjs.com/examples/custom-icons/leaf-green.png",
+      shadowUrl: "http://leafletjs.com/examples/custom-icons/leaf-shadow.png",
+    });
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: "© OpenStreetMap contributors",
+      icon: greenIcon,
     }).addTo(map);
 
     console.log(sessionStorage.lat + "" + sessionStorage.lng);
@@ -30,11 +42,51 @@ export default {
       ],
       language: "es",
       routeWhileDragging: true,
+      routeWhileDragging: true,
+      lineOptions: {
+        styles: [{ color: "green", opacity: 1, weight: 5 }],
+      },
+
+      
     }).addTo(map);
-    const photoImgFrom='<img src="https://i.ibb.co/gSx4w53/LANCHE.jpg" height="150px" width="150px alt="LANCHE" border="0">';
+ 
+        let puntos = new Array();
+        puntos.push({ lat: sessionStorage.lat, lng: sessionStorage.lng });
+        puntos.push({ lat: -36.98797, lng: -56.545454 });
+        for (var i = 0; i < 2; i++) {
+          const marker = L.marker([puntos[i].lat, puntos[i].lng], {
+            draggable: true,
+            bounceOnAdd: false,
+            bounceOnAddOptions: {
+              duration: 1000,
+              height: 800,
+              function() {
+                bindPopup(myPopup).openOn(map);
+              },
+            },
+            
+            icon: L.icon({
+              iconUrl: "https://i.ibb.co/2MNpX1P/APACHE.png",
+              iconSize: [38, 95],
+              iconAnchor: [22, 94],
+              popupAnchor: [-3, -76],
+              // shadowUrl: 'https://i.ibb.co/hX91BZW/luminaria-Antigua.jpg',
+              //  shadowSize: [68, 95],
+              shadowAnchor: [22, 94],
+            }),
+
+          }).addTo(map);
+
+      
+        }
+      
+    // https://i.ibb.co/2MNpX1P/APACHE.png
+    // https://i.ibb.co/s6fdypV/taxi.png
+    const photoImgFrom =
+      '<img src="https://i.ibb.co/gSx4w53/LANCHE.jpg" height="150px" width="150px alt="LANCHE" border="0">';
     L.marker([sessionStorage.lat, sessionStorage.lng])
       .addTo(map)
-      .bindPopup(L.popup({}).setContent("<b>Desde!</b><br />."+ photoImgFrom))
+      .bindPopup(L.popup({}).setContent("<b>Desde!</b><br />." + photoImgFrom))
       .openPopup(true);
     //  C:\MAMP\htdocs\heladeria-1\src/assets/bolas.jpg
     var photoImg =
@@ -58,9 +110,6 @@ export default {
   --logo: url(https://s.cdpn.io/profiles/user/1490182/80.jpg?1538125571);
 }
 
-  
-
-
 .leaflet-popup-content {
   padding: 0.5rem;
   line-height: 1.8;
@@ -69,15 +118,10 @@ export default {
   min-width: 200px;
   font-size: 0.9rem;
   font-family: inherit;
-
-  
-
- 
 }
 
 .leaflet-container a.leaflet-popup-close-button {
   padding: 0.8rem;
   z-index: 1;
 }
-
 </style>
