@@ -1,6 +1,7 @@
 <template>
  <div>
      <v-card 
+     height="50vh"
      width="100%" 
      color="primary" 
      class="mt-5 d-flex flex-column align-center justify-center">
@@ -51,7 +52,7 @@
              </v-col>
            </v-card-text>
      </v-card>
-     <v-card class="mt-5 responsive">
+     <v-card height="80vh" class="mt-5 responsive">
          <v-card-title>
              Que estás buscando hoy?
          </v-card-title>

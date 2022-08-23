@@ -2,7 +2,7 @@
    <div>
         <v-app-bar color="primary" class="" style="position:fixed; bottom:0; width:100%">
          <v-card-text style="height:60px;" class="py-0 d-flex justify-space-around">
-             <v-btn to="heladerias" text color="primary" class="white--text px-0 ml-n2">
+             <v-btn @click="dialogo = !dialogo" text color="primary" class="white--text px-0 ml-n2">
                 <div style="display:flex; flex-direction:column; margin-top:35px;">
                 <v-icon class="white--text">
                     mdi-ice-cream
@@ -81,6 +81,83 @@
       <div style="height:40px">
 
       </div>
+      <v-row>
+         <v-dialog
+          v-model="dialogo"
+            transition="dialogo"
+            max-width="600"
+          >
+         
+          <template >
+            <v-card>
+              <v-toolbar
+                color="primary"
+                dark
+              >¿Qué tipo de helado estás buscando?</v-toolbar>
+              <v-card-text>
+                <v-hover class="mt-5" v-slot="{ hover }">
+                <v-card
+                class="mx-auto"
+                color="grey lighten-4"
+                max-width="600"
+                >
+                <v-img
+                    src="../assets/helados.jpg"
+                    class="imagen-filtro"
+                >
+                    <v-expand-transition>
+                    <div
+                        v-if="hover"
+                        class="d-flex flex-column transition-fast-in-fast-out black darken-2 v-card--reveal  white--text"
+                        style="height: 100%;"
+                    >
+                        <p style="font-size:20px; text-align:center; font-weight:bold;">
+                            Encontra las mejores heladerias del partido de la costa
+                        </p>
+                        <router-link to="heladerias" style="text-decoration:underline; font-size:20px; color:white;">ver más</router-link>
+                    </div>
+                    </v-expand-transition>
+                </v-img>
+                </v-card>
+            </v-hover>
+
+               <v-hover class="mt-5" v-slot="{ hover }">
+                <v-card
+                class="mx-auto"
+                color="grey lighten-4"
+                max-width="600"
+                >
+                <v-img
+                    src="../assets/helados-artesanales.jpg"
+                    class="imagen-filtro"
+                >
+                    <v-expand-transition>
+                    <div
+                        v-if="hover"
+                        class="d-flex flex-column transition-fast-in-fast-out black darken-2 v-card--reveal  white--text"
+                        style="height: 100%;"
+                    >
+                        <p style="font-size:20px; text-align:center; font-weight:bold; opacity:1;">
+                            Encontra las mejores heladerias artesanales del partido de la costa
+                        </p>
+                       <v-btn text @click="dialogo=!dialogo">
+                         <router-link  to="heladerias" style="text-decoration:underline; font-size:20px; color:white;">ver más</router-link>
+                       </v-btn>
+                    </div>
+                    </v-expand-transition>
+                </v-img>
+                </v-card>
+            </v-hover>
+              </v-card-text>
+               <v-card-actions class="d-flex justify-end">
+                  <v-btn text @click="dialogo = !dialogo">
+                    cerrar
+                  </v-btn>
+              </v-card-actions>
+            </v-card>
+          </template>
+        </v-dialog>
+      </v-row>
       
    </div>
 </template>
@@ -91,11 +168,19 @@ export default {
     data: () => ({
       drawer: false,
       group: null,
+      dialogo:false
     }),
 }
 </script>
 
-<style>
-
+<style scoped>
+.v-card--reveal {
+  align-items: center;
+  bottom: 0;
+  justify-content: center;
+  opacity: .8;
+  position: absolute;
+  width: 100%;
+}
 
 </style>
