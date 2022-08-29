@@ -2,7 +2,7 @@
    <div>
         <v-app-bar color="primary" class="" style="position:fixed; bottom:0; width:100%">
          <v-card-text style="height:60px; width:100%;" class="py-0 d-flex justify-space-between mx-auto">
-             <v-btn to="heladerias" text color="primary" class="white--text px-0 ml-n2">
+             <v-btn @click="dialog2 = !dialog2" text color="primary" class="white--text px-0 ml-n2">
                 <div style="display:flex; flex-direction:column; margin-top:35px;">
                 <v-icon class="white--text">
                     mdi-ice-cream
@@ -90,7 +90,94 @@
             <v-card-actions class="justify-end">
               <v-btn
                 text
-                @click="dialog.value = false"
+                @click="dialog = false"
+              >Close</v-btn>
+            </v-card-actions>
+          </v-card>
+      </v-dialog>
+
+       <v-dialog
+        transition="dialog-bottom-transition"
+        max-width="90%"
+        v-model="dialog2"
+      >
+      
+          <v-card>
+            <v-toolbar
+              color="primary"
+              dark
+            >Hola usuario, este es tu pedido</v-toolbar>
+            <v-card-text>
+              <v-col
+            cols="12"
+            lg="6"
+            md="6"
+            sm="12"
+          >
+              <v-hover v-slot="{ hover }">
+                <v-card
+                class="mx-auto"
+                color="grey lighten-4"
+                max-width="600"
+                >
+                <v-img
+                    src="../assets/helados.jpg"
+                    class="imagen-filtro"
+                >
+                    <v-expand-transition>
+                    <div
+                        v-if="hover"
+                        class="d-flex flex-column transition-fast-in-fast-out black darken-2 v-card--reveal  white--text"
+                        style="height: 100%;"
+                    >
+                        <p style="font-size:20px; text-align:center; font-weight:bold;">
+                            Encontra las mejores heladerias del partido de la costa
+                        </p>
+                        <router-link to="heladerias/:clasicas" style="text-decoration:underline; font-size:20px;">ver más</router-link>
+                    </div>
+                    </v-expand-transition>
+                </v-img>
+                </v-card>
+            </v-hover>
+          </v-col>
+          <v-col
+          class="mb-5"
+            cols="12"
+            lg="6"
+            md="6"
+            sm="12"
+          >
+              <v-hover v-slot="{ hover }">
+                <v-card
+                class="mx-auto"
+                color="grey lighten-4"
+                max-width="600"
+                >
+                <v-img
+                    src="../assets/helados-artesanales.jpg"
+                    class="imagen-filtro"
+                >
+                    <v-expand-transition>
+                    <div
+                        v-if="hover"
+                        class="d-flex flex-column transition-fast-in-fast-out black darken-2 v-card--reveal  white--text"
+                        style="height: 100%;"
+                    >
+                        <p style="font-size:20px; text-align:center; font-weight:bold; opacity:1;">
+                            Encontra las mejores heladerias artesanales del partido de la costa
+                        </p>
+                        <router-link to="heladerias/:artesanales" style="text-decoration:underline; font-size:20px;">ver más</router-link>
+                    </div>
+                    </v-expand-transition>
+                </v-img>
+                </v-card>
+            </v-hover>
+          </v-col>
+            </v-card-text>
+            <v-card-actions class="justify-end">
+              <v-btn
+                text
+                @click="dialog2 = false"
               >Close</v-btn>
             </v-card-actions>
           </v-card>
@@ -108,6 +195,7 @@ export default {
     name:'BottomTab',
     data: () => ({
         dialog:false,
+        dialog2:false,
       drawer: false,
       group: null,
       pedido:[
@@ -137,7 +225,14 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.v-card--reveal {
+  align-items: center;
+  bottom: 0;
+  justify-content: center;
+  opacity: .8;
+  position: absolute;
+  width: 100%;
+}
 
 </style>

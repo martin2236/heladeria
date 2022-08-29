@@ -24,7 +24,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Login.vue')
   },
   {
-    path: '/heladerias',
+    path: '/heladerias/:tipo',
     name: 'Heladerias',
     component: () => import(/* webpackChunkName: "about" */ '../views/Heladerias.vue')
   },
