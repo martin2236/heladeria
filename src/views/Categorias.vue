@@ -73,6 +73,11 @@
     
          <InserCoorCom v-if="abreMapa"></InserCoorCom>
     </v-container>
+    <v-file-input
+    v-model="file"
+  truncate-length="15"
+></v-file-input>
+    <v-btn @click="verTamaño()">ver tamaño</v-btn>
   </v-app>
 </template>
 
@@ -84,6 +89,7 @@ export default {
        InserCoorCom
   },
   data: () => ({
+    file: [],
     latitud: 0,
     longitud: 0,
     coordenadas: [],
@@ -96,6 +102,9 @@ export default {
     );
   },
   methods: {
+    verTamaño(){
+      console.log(this.file[0].size)
+    },
     registrar() {},
     mostrarUbicacion() {
       this.latitud = this.coordenadas.coords.latitude;
