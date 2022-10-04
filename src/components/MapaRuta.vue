@@ -83,7 +83,7 @@ export default {
       .addTo(map)
       .bindPopup(L.popup({}).setContent("<b>Desde!</b><br />." + photoImgFrom))
       .openPopup(true);
-    //  C:\MAMP\htdocs\heladeria-1\src/assets/bolas.jpg
+  
     var photoImg =
       '<img src="https://static.pexels.com/photos/189349/pexels-photo-189349.jpeg" height="150px" width="150px"/>';
     L.marker([-36.49543124960607, -56.700707674026496])
