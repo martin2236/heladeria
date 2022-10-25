@@ -59,15 +59,16 @@
         </div>
       <router-view/>
       <App2></App2>
+      <Lista/>
     </v-main>
   </v-app>
 </template>
 
 <script>
-
+import Lista from "@/components/Lista.vue"
 export default {
     name: 'App',
-    components:{ },
+    components:{ Lista},
     methods: {
         login() {
             this.$auth.loginWithRedirect();
