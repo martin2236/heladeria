@@ -51,7 +51,7 @@
                       <v-col cols="12" sm="6" md="6">
                         <v-text-field
                           v-model="editedItem.apellido_nombre"
-                          label="Nombre"
+                          label="Nombre y apellido"
                           :rules="nameRules"
                         ></v-text-field>
                       </v-col>
@@ -66,7 +66,6 @@
                       </v-col>
                       <v-col cols="12" sm="6" md="6">
                         <v-text-field
-                          style="margin-top: -30px"
                           v-model="editedItem.mail"
                           label="Mail"
                           min="1"
@@ -77,23 +76,31 @@
                       </v-col>
                     </v-row>
                     <v-row>
-                      <v-col cols="12" sm="3" md="3">
+                      <v-col cols="12" sm="6" md="6">
                         <v-text-field
                           v-model="editedItem.edad"
                           label="Edad"
                           type="number"
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="12" sm="3" md="3">
+                      <v-col cols="12" sm="6" md="6">
                         <v-text-field
                           v-model="editedItem.codigo_postal"
                           label="Codigo postal"
                           type="number"
                         ></v-text-field>
                       </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="12" sm="6" md="6">
+                        <v-text-field
+                          v-model="editedItem.domicilio"
+                          label="Domicilio"
+                          :rules="nameRules"
+                        ></v-text-field>
+                      </v-col>
                       <v-col cols="12" sm="6" md="6">
                         <v-autocomplete
-                          style="margin-top: 10px"
                           label="Carrera"
                           :items="carreras"
                           item-text="nombre"
@@ -151,6 +158,10 @@ export default {
   data: () => ({
     formas_aprobacion: ["Examen final", "Promocinal"],
     carreras: [],
+    emailRules: [
+      (v) => !!v || "E-mail es requiredo",
+      (v) => /.+@.+/.test(v) || "E-mail debe ser valido",
+    ],
     nameRules: [
       (v) => !!v || "Nombre de campo requerido",
       (v) => (v && v.length <= 150) || "Nombre campo requerido",
@@ -252,7 +263,7 @@ export default {
     actualiza() {
       setTimeout(() => {
         this.initialize;
-      }, 2000);
+      }, 3000);
     },
     deleteItem(item) {
       const index = this.alumnos.indexOf(item);
@@ -277,7 +288,7 @@ export default {
 
       var promise = Promise.race([
         fetch(
-          "http://localhost/backend_postulacion/alumnos.php",
+          "http://localhost/backend_postulacion/estudiantes.php",
           requestOptions
         ).then((response) => response.text()),
         new Promise((resolve, reject) =>
@@ -338,12 +349,15 @@ export default {
         var raw = JSON.stringify({
           opcion: "actualizar",
           id: this.pk,
-          nombre: this.editedItem.nombre,
-          horasCursada: this.editedItem.horas_cursada,
+          dni: this.editedItem.dni,
+          apellido_nombre: this.editedItem.apellido_nombre,
+          celular: this.editedItem.celular,
+          mail: this.editedItem.mail,
+          edad: this.editedItem.edad,
+          codigo_postal: this.editedItem.codigo_postal,
+          domicilio: this.editedItem.domicilio,
           logico: "0",
-          formaAprobacion: this.editedItem.forma_aprobacion,
-          carreraId: this.editedItem.carrera_id,
-          anio_carrera: this.editedItem.anio_carrera,
+          carrera_id: this.editedItem.carrera_id,
         });
 
         var requestOptions = {
@@ -355,7 +369,7 @@ export default {
 
         var promise = Promise.race([
           fetch(
-            "http://localhost/backend_postulacion/alumnos.php",
+            "http://localhost/backend_postulacion/estudiantes.php",
             requestOptions
           ).then((response) => response.text()),
           new Promise((resolve, reject) =>
@@ -374,12 +388,15 @@ export default {
 
         var raw = JSON.stringify({
           opcion: "insertar",
-          nombre: this.editedItem.nombre,
-          horasCursada: this.editedItem.horas_cursada,
+          dni: this.editedItem.dni,
+          apellido_nombre: this.editedItem.apellido_nombre,
+          celular: this.editedItem.celular,
+          mail: this.editedItem.mail,
+          edad: this.editedItem.edad,
+          codigo_postal: this.editedItem.codigo_postal,
+          domicilio: this.editedItem.domicilio,
           logico: "0",
-          formaAprobacion: this.editedItem.forma_aprobacion,
-          carreraId: this.editedItem.carrera_id,
-          anio_carrera: this.editedItem.anio_carrera,
+          carrera_id: this.editedItem.carrera_id,
         });
 
         var requestOptions = {
@@ -391,7 +408,7 @@ export default {
 
         var promise = Promise.race([
           fetch(
-            "http://localhost/backend_postulacion/alumnos.php",
+            "http://localhost/backend_postulacion/estudiantes.php",
             requestOptions
           ).then((response) => response.text()),
           new Promise((resolve, reject) =>

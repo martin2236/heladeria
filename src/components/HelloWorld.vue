@@ -30,7 +30,7 @@
             </v-col>
 
             <v-col cols="10">
-              <alumnos v-if="eleccion == 'Alumnos'"></alumnos>
+              <alumnos v-if="eleccion == 'Estudiantes'"></alumnos>
               <facultades v-if="eleccion == 'Facultades'"></facultades>
               <carreras v-if="eleccion == 'Carreras'"></carreras>
               <materias v-if="eleccion == 'Materias'"></materias>
@@ -63,7 +63,7 @@ export default {
   data: () => ({
     eleccion: "",
     pantallas: [
-      { pantalla: "Alumnos", icon: "mdi-copyright"},
+      { pantalla: "Estudiantes", icon: "mdi-copyright"},
       { pantalla: "Carreras", icon: "mdi-copyright" },
       { pantalla: "Facultades", icon: "mdi-hamburger" },
       { pantalla: "Inscripciones", icon: "mdi-barcode-scan" },
