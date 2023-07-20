@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    coordenadasUsuario:[]
+    color:'#5C6BC0'
   },
   mutations: {
   },
