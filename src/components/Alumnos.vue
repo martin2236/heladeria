@@ -145,19 +145,102 @@
           </template>
           <span>Eliminar</span>
         </v-tooltip>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn v-bind="attrs" v-on="on" icon color="blue darken-1">
+              <v-icon
+                medium
+                @click="
+                  (dialog_inscripciones = true),
+                    ($store.state.pk_estudiante = item.id),
+                    ($store.state.pk_carrera = item.carrera_id),
+                    ($store.state.apellido_nombre = item.apellido_nombre),
+                    obtener_materias()
+                "
+              >
+                mdi-clipboard-text
+              </v-icon>
+            </v-btn>
+          </template>
+          <span>Asigna materias</span>
+        </v-tooltip>
       </template>
       <template v-slot:no-data>
         <v-btn color="primary" @click="initialize">Reset</v-btn>
       </template>
     </v-data-table>
+    <template>
+      <v-row justify="center">
+        <v-dialog
+          v-model="dialog_inscripciones"
+          fullscreen
+          hide-overlay
+          transition="dialog-bottom-transition"
+        >
+          <v-card>
+            <v-toolbar dark :color="$store.state.color">
+              <v-btn icon dark @click="dialog_inscripciones = false">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+              <v-toolbar-title
+                >Asigna materias al estudiante:
+                {{ $store.state.apellido_nombre }}</v-toolbar-title
+              >
+              <v-spacer></v-spacer>
+            </v-toolbar>
+
+            <v-divider></v-divider>
+            <v-list three-line subheader>
+              <v-card elevation="3" class="pa-6" outlined>
+                <v-row>
+                  <v-col cols="12" md="4">
+                    <v-autocomplete
+                      style="margin-top: 10px"
+                      label="Materias"
+                      :items="materias"
+                      item-text="nombre"
+                      item-value="id"
+                      v-model="editedItem.materia_id"
+                      @change="
+                        anio_carrera = datosMateria(editedItem.materia_id)
+                      "
+                    >
+                    </v-autocomplete>
+                  </v-col>
+                  <v-col md="3" v-if="anio_carrera != ''">
+                    <p style="margin-top: 30px">
+                      <b>Pertenece a {{ anio_carrera }} ° año</b>
+                    </p></v-col
+                  >
+                  <v-col cols="12" md="5">
+                    <v-btn
+                      v-if="anio_carrera != ''"
+                      block
+                      style="margin-top: 20px"
+                      outlined
+                      :color="$store.state.color"
+                      dark
+                    >
+                      Asignar materia
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-card>
+            </v-list>
+          </v-card>
+        </v-dialog>
+      </v-row>
+    </template>
   </v-card>
 </template>
 
 <script>
 export default {
   data: () => ({
+    dialog_inscripciones: false,
     formas_aprobacion: ["Examen final", "Promocinal"],
     carreras: [],
+    materias: [],
     emailRules: [
       (v) => !!v || "E-mail es requiredo",
       (v) => /.+@.+/.test(v) || "E-mail debe ser valido",
@@ -182,7 +265,7 @@ export default {
       { text: "Carrera", value: "carrera_nombre" },
       { text: "Acciones", value: "actions", sortable: false },
     ],
-
+    anio_carrera: "",
     alumnos: [],
     editedIndex: -1,
     editedItem: {
@@ -227,6 +310,25 @@ export default {
   },
 
   methods: {
+    datosMateria(materiaId) {
+      const materiaEncontrada = this.materias.find(
+        (materia) => materia.id === materiaId
+      );
+      return materiaEncontrada.anio_carrera || null;
+    },
+
+    obtener_materias() {
+      var requestOptions = {
+        method: "GET",
+
+        redirect: "follow",
+      };
+      //
+      fetch("http://localhost/backend_postulacion/materias.php", requestOptions)
+        .then((response) => response.json())
+        .then((result) => (this.materias = result))
+        .catch((error) => console.log("error", error));
+    },
     get_carreras() {
       var requestOptions = {
         method: "GET",
@@ -246,7 +348,10 @@ export default {
         redirect: "follow",
       };
       //
-      fetch("http://localhost/backend_postulacion/estudiantes.php", requestOptions)
+      fetch(
+        "http://localhost/backend_postulacion/estudiantes.php",
+        requestOptions
+      )
         .then((response) => response.json())
         .then((result) => (this.alumnos = result))
         .catch((error) => console.log("error", error));

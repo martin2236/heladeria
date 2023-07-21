@@ -5,7 +5,10 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    color:'#5C6BC0'
+    color:'#5C6BC0',
+    apellido_nombre:'',
+    pk_estudiante:'',
+    pk_carrera:''
   },
   mutations: {
   },
