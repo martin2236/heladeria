@@ -236,7 +236,7 @@ export default {
       };
       //
       fetch(
-        "http://localhost/backend_postulacion/facultades.php",
+        `${this.$store.state.url_api}facultades.php`,
         requestOptions
       )
         .then((response) => response.json())
@@ -250,7 +250,7 @@ export default {
         redirect: "follow",
       };
       //
-      fetch("http://localhost/backend_postulacion/carreras.php", requestOptions)
+      fetch(`${this.$store.state.url_api}carreras.php`, requestOptions)
         .then((response) => response.json())
         .then((result) => (this.carreras = result))
         .catch((error) => console.log("error", error));
@@ -293,7 +293,7 @@ export default {
 
       var promise = Promise.race([
         fetch(
-          "http://localhost/backend_postulacion/carreras.php",
+          `${this.$store.state.url_api}carreras.php`,
           requestOptions
         ).then((response) => response.text()),
         new Promise((resolve, reject) =>
@@ -371,7 +371,7 @@ export default {
 
         var promise = Promise.race([
           fetch(
-            "http://localhost/backend_postulacion/carreras.php",
+            `${this.$store.state.url_api}carreras.php`,
             requestOptions
           ).then((response) => response.text()),
           new Promise((resolve, reject) =>
@@ -407,7 +407,7 @@ export default {
 
         var promise = Promise.race([
           fetch(
-            "http://localhost/backend_postulacion/carreras.php",
+            `${this.$store.state.url_api}carreras.php`,
             requestOptions
           ).then((response) => response.text()),
           new Promise((resolve, reject) =>

@@ -35,7 +35,7 @@
               <carreras v-if="eleccion == 'Carreras'"></carreras>
               <materias v-if="eleccion == 'Materias'"></materias>
               <inscripciones v-if="eleccion == 'Inscripciones'"></inscripciones>
-              <notas v-if="eleccion == 'Notas'"></notas>
+            
             </v-col>
           </v-row>
         </v-container>
@@ -50,7 +50,7 @@ import facultades from "./Facultades";
 import carreras from "./Carreras";
 import materias from "./Materias";
 import inscripciones from "./Inscripciones";
-import notas from "./Notas";
+
 export default {
   components: {
     alumnos,
@@ -58,17 +58,17 @@ export default {
     carreras,
     materias,
     inscripciones,
-    notas,
+ 
   },
   data: () => ({
     eleccion: "",
     pantallas: [
-      { pantalla: "Estudiantes", icon: "mdi-copyright"},
+      { pantalla: "Estudiantes", icon: "mdi-account-multiple-minus"},
       { pantalla: "Carreras", icon: "mdi-copyright" },
       { pantalla: "Facultades", icon: "mdi-hamburger" },
       { pantalla: "Inscripciones", icon: "mdi-barcode-scan" },
       { pantalla: "Materias", icon: "mdi-file" },
-      { pantalla: "Notas", icon: "mdi-account-multiple-minus" },
+    
     ],
   
   }),

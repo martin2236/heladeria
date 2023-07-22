@@ -144,7 +144,7 @@ export default {
       };
       //
       fetch(
-        "http://localhost/backend_postulacion/facultades.php",
+        `${this.$store.state.url_api}facultades.php`,
         requestOptions
       )
         .then((response) => response.json())
@@ -183,7 +183,7 @@ export default {
 
       var promise = Promise.race([
         fetch(
-          "http://localhost/backend_postulacion/facultades.php",
+          `${this.$store.state.url_api}facultades.php`,
           requestOptions
         ).then((response) => response.text()),
         new Promise((resolve, reject) =>
@@ -221,20 +221,7 @@ export default {
     },
     save() {
       if (this.editedIndex > -1) {
-        var requestOptions = {
-          method: "PUT",
-
-          redirect: "follow",
-        };
-
-        fetch(
-          "http://jorgeperalta-001-site3.itempurl.com/apiVentas/categorias.php?id=" +
-            this.editedItem.id_facultad +
-            "&nombre=" +
-            this.editedItem.nombre_facultad,
-
-          requestOptions
-        ).then((response) => response.text());
+      
         this.resetValidation();
         this.initialize();
       } else {
@@ -257,7 +244,7 @@ export default {
 
         var promise = Promise.race([
           fetch(
-            "http://localhost/backend_postulacion/facultades.php",
+            `${this.$store.state.url_api}facultades.php"`,
             requestOptions
           ).then((response) => response.text()),
           new Promise((resolve, reject) =>
