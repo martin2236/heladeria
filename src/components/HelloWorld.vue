@@ -2,7 +2,7 @@
   <v-app id="inspire">
     <v-main class="black">
       <v-img width="1600" src="../assets/super2.png">
-        <v-container >
+        <v-container>
           <v-row>
             <v-col cols="2">
               <v-sheet :color="$store.state.color" rounded="lg">
@@ -34,8 +34,6 @@
               <facultades v-if="eleccion == 'Facultades'"></facultades>
               <carreras v-if="eleccion == 'Carreras'"></carreras>
               <materias v-if="eleccion == 'Materias'"></materias>
-              <inscripciones v-if="eleccion == 'Inscripciones'"></inscripciones>
-            
             </v-col>
           </v-row>
         </v-container>
@@ -49,7 +47,6 @@ import alumnos from "./Alumnos.vue";
 import facultades from "./Facultades";
 import carreras from "./Carreras";
 import materias from "./Materias";
-import inscripciones from "./Inscripciones";
 
 export default {
   components: {
@@ -57,25 +54,16 @@ export default {
     facultades,
     carreras,
     materias,
-    inscripciones,
- 
   },
   data: () => ({
     eleccion: "",
     pantallas: [
-      { pantalla: "Estudiantes", icon: "mdi-account-multiple-minus"},
+      { pantalla: "Estudiantes", icon: "mdi-account-multiple-minus" },
       { pantalla: "Carreras", icon: "mdi-copyright" },
       { pantalla: "Facultades", icon: "mdi-hamburger" },
-      { pantalla: "Inscripciones", icon: "mdi-barcode-scan" },
       { pantalla: "Materias", icon: "mdi-file" },
-    
     ],
-  
   }),
-  mounted() {
-
-  },
-
-
+  mounted() {},
 };
 </script>

@@ -260,16 +260,6 @@
 
                     <v-spacer></v-spacer>
                     <v-dialog v-model="dialog_notas" max-width="500px">
-                      <template v-slot:activator="{ on }">
-                        <v-btn
-                          outlined
-                          color="black"
-                          dark
-                          class="mb-2"
-                          v-on="on"
-                          >Nueva nota</v-btn
-                        >
-                      </template>
                       <v-card>
                         <v-card-title>
                           <span class="headline">{{ formTitlenotas }}</span>
@@ -317,7 +307,6 @@
                                   type="number"
                                 ></v-text-field>
                               </v-col>
-                              
                             </v-row>
                           </v-container>
                         </v-card-text>
@@ -330,7 +319,10 @@
                             @click="dialog_notas = false"
                             >Cancelar</v-btn
                           >
-                          <v-btn color="blue darken-1" text @click="guardar_nota(),dialog_notas = false"
+                          <v-btn
+                            color="blue darken-1"
+                            text
+                            @click="guardar_nota(), (dialog_notas = false)"
                             >Guardar</v-btn
                           >
                         </v-card-actions>
@@ -342,23 +334,16 @@
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn v-bind="attrs" v-on="on" icon color="green">
-                        <v-icon medium class="mr-2" @click="editItemNotas(item)">
-                            mdi-table-edit
+                        <v-icon
+                          medium
+                          class="mr-2"
+                          @click="editItemNotas(item)"
+                        >
+                          mdi-table-edit
                         </v-icon>
                       </v-btn>
                     </template>
                     <span>Insertar nota</span>
-                  </v-tooltip>
-
-                  <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-btn v-bind="attrs" v-on="on" icon color="red darken-1">
-                        <v-icon medium @click="deleteItem(item)">
-                          mdi-delete
-                        </v-icon>
-                      </v-btn>
-                    </template>
-                    <span>Eliminar</span>
                   </v-tooltip>
                 </template>
                 <template v-slot:no-data>
@@ -376,6 +361,7 @@
 <script>
 export default {
   data: () => ({
+    valida_insertar: true,
     dialog_notas: false,
     dialog_inscripciones: false,
     formas_aprobacion: ["Examen final", "Promocinal"],
@@ -389,7 +375,7 @@ export default {
       (v) => !!v || "Nombre de campo requerido",
       (v) => (v && v.length <= 150) || "Nombre campo requerido",
     ],
-    pk_nota:'',
+    pk_nota: "",
     pk: "",
     dialog: false,
     search: "",
@@ -416,8 +402,10 @@ export default {
       { text: "Final", value: "final" },
       { text: "Acciones", value: "actions", sortable: false },
     ],
+    porcentajeAprobado: 70,
     anio_carrera: "",
     alumnos: [],
+    anio_sigiente: 1,
     editedIndex: -1,
     editedIndex_nota: -1,
     editedItem_Notas: {
@@ -461,7 +449,7 @@ export default {
       return this.editedIndex === -1 ? "Nuevo estudiante" : "Edita estudiante";
     },
     formTitlenotas() {
-      return this.editedIndex2 === -1 ? "Nueva nota" : "Edita estudiante";
+      return this.editedIndex2 === -1 ? "Nueva nota" : "Carga nota";
     },
   },
 
@@ -479,20 +467,134 @@ export default {
   },
 
   methods: {
-  
+    contarMateriasAprobadas(notas) {
+      let count = 0;
+
+      for (const nota of notas) {
+        if (nota.final > 4) {
+          count++;
+        }
+      }
+
+      return count;
+    },
+    asignarMaterias(notas) {
+      const cantidad_de_notas = notas.length;
+      // alert(cantidad_de_notas);
+      // Verificar si el estudiante no tiene materias asignadas cantidad_de_notas > 0 && cantidad_de_notas < 5 || cantidad_de_notas === 0
+      if (cantidad_de_notas === 0) {
+        // Asignar las materias correspondientes al primer año de la carrera
+        this.valida_insertar = true;
+      } else if (cantidad_de_notas > 0 && cantidad_de_notas < 10) {
+        this.valida_insertar = false;
+        // Calcular el total de materias del año actual del estudiante
+        const totalMateriasAnioActual = cantidad_de_notas;
+        // Calcular el total de materias aprobadas del año actual del estudiante
+
+        const materiasAprobadasAnioActual = this.contarMateriasAprobadas(notas);
+        // Calcular el porcentaje de materias aprobadas del año actual
+        const porcentajeAprobadoAnioActual =
+          (materiasAprobadasAnioActual / totalMateriasAnioActual) * 100;
+
+        // Verificar si el estudiante puede asignar materias del año siguiente
+        if (porcentajeAprobadoAnioActual >= this.porcentajeAprobado) {
+          this.anio_sigiente += notas[notas.length - 1].anio_carrera;
+          this.notas = notas.filter(
+            (nota) => nota.anio_carrera === this.anio_sigiente
+          );
+        }
+      } else {
+        this.valida_insertar = false;
+      }
+    },
+    calcularPromedioParciales(notas) {
+      let totalNotas = 0;
+      let cantidadParciales = 0;
+
+      notas.forEach((nota) => {
+        for (let key in nota) {
+          if (key.startsWith("parcial_")) {
+            totalNotas += nota[key];
+            cantidadParciales++;
+          }
+        }
+      });
+
+      if (cantidadParciales === 0) {
+        return 0; // Si no hay notas de parciales, el promedio es 0
+      }
+
+      const promedio = totalNotas / cantidadParciales;
+      return promedio;
+    },
+    // Función para cargar las notas del estudiante
+    cargarNotas(notas) {
+      // Verificar si el estudiante tiene materias asignadas
+      if (!notas[0].nombre) {
+        console.log("El estudiante no tiene materias asignadas.");
+        return;
+      }
+
+      // Recorrer las materias asignadas al estudiante
+      for (const materia of notas) {
+        // Verificar si la materia tiene notas cargadas
+        if (materia.nombre && materia.parcial_1) {
+          console.log(`No se encontraron notas para la materia: ${materia}`);
+          continue;
+        }
+
+        // Verificar si hay 4 notas por materia
+        if (notas.length !== 4) {
+          console.log(`Faltan notas para la materia: ${materia}`);
+          continue;
+        }
+
+        // Calcular el promedio de las notas de parciales
+        const promedioParciales = this.calcularPromedioParciales(notas);
+
+        // Verificar si el estudiante reprueba la materia
+        notas.filter((nota) => nota.anio_carrera === this.anio_sigiente);
+        const parcialesDesaprobados = notas.filter((nota) => nota < 4).length;
+        if (parcialesDesaprobados >= 2) {
+          materia.aprobada = false;
+          materia.notaFinal = 2;
+        } else if (parcialesDesaprobados === 1) {
+          // Calcular el promedio de las notas de parciales aprobados
+
+          const notasAprobadas = notas.filter((nota) => nota >= 4);
+          const promedioParcialesAprobados =
+            notasAprobadas.reduce((sum, nota) => sum + nota, 0) /
+            notasAprobadas.length;
+          materia.aprobada = true;
+          materia.vaAFinal = true;
+          materia.notaFinal = promedioParcialesAprobados;
+        } else {
+          // Verificar si el estudiante promociona la materia
+          if (promedioParciales >= 7 && materia.promocional) {
+            materia.aprobada = true;
+            materia.promocionada = true;
+            materia.notaFinal = promedioParciales;
+          } else {
+            materia.aprobada = true;
+            materia.vaAFinal = true;
+            materia.notaFinal = promedioParciales;
+          }
+        }
+      }
+    },
     insertar_nota(pk) {
-      var  obj = this
+      var obj = this;
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
       var raw = JSON.stringify({
         opcion: "insertar",
         inscripcion_id: pk,
-        parcial1:  this.editedItem_Notas.parcial_1,
-        parcial2:  this.editedItem_Notas.parcial_2,
-        parcial3:  this.editedItem_Notas.parcial_3,
-        parcial4:  this.editedItem_Notas.parcial_4,
-        final:  this.editedItem_Notas.final
+        parcial1: this.editedItem_Notas.parcial_1,
+        parcial2: this.editedItem_Notas.parcial_2,
+        parcial3: this.editedItem_Notas.parcial_3,
+        parcial4: this.editedItem_Notas.parcial_4,
+        final: this.editedItem_Notas.final,
       });
 
       var requestOptions = {
@@ -512,10 +614,12 @@ export default {
       ]);
 
       promise.then((result) => console.log(result)),
-      promise.then( obj.notas_x_estudiante()),
-     // promise.then((result) => obj.swal_get(result))
+        promise.then(obj.notas_x_estudiante()),
+        // promise.then((result) => obj.swal_get(result))
         promise.catch((error) => console.log(error));
-        setTimeout(() =>{this.notas_x_estudiante()},3000)
+      setTimeout(() => {
+        this.notas_x_estudiante();
+      }, 3000);
     },
     notas_x_estudiante() {
       var obj = this;
@@ -535,40 +639,45 @@ export default {
       fetch(`${this.$store.state.url_api}notas.php`, requestOptions)
         .then((response) => response.json())
         .then((result) => (obj.notas = result))
+        .then((result) => obj.asignarMaterias(result))
         .catch((error) => console.log("error", error));
     },
     insertar_inscripciones() {
-      var obj = this;
-      var myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
+      if (this.valida_insertar) {
+        var obj = this;
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
 
-      var raw = JSON.stringify({
-        opcion: "insertar",
-        id_estudiante: this.$store.state.pk_estudiante,
-        id_materia: this.editedItem_Notas.materia_id,
-      });
+        var raw = JSON.stringify({
+          opcion: "insertar",
+          id_estudiante: this.$store.state.pk_estudiante,
+          id_materia: this.editedItem_Notas.materia_id,
+        });
 
-      var requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
+        var requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: raw,
+          redirect: "follow",
+        };
 
-      var promise = Promise.race([
-        fetch(
-          `${this.$store.state.url_api}inscripciones.php`,
-          requestOptions
-        ).then((response) => response.json()),
-        new Promise((resolve, reject) =>
-          setTimeout(() => reject(new Error("Timeout")), 520000)
-        ),
-      ]);
+        var promise = Promise.race([
+          fetch(
+            `${this.$store.state.url_api}inscripciones.php`,
+            requestOptions
+          ).then((response) => response.json()),
+          new Promise((resolve, reject) =>
+            setTimeout(() => reject(new Error("Timeout")), 520000)
+          ),
+        ]);
 
-      promise.then((result) => obj.insertar_nota(result))
-        promise.then((result) => console.log(result))
-       // promise.then((result) => obj.swal_get(result))
+        promise.then((result) => obj.insertar_nota(result));
+        promise.then((result) => console.log(result));
+        // promise.then((result) => obj.swal_get(result))
         promise.catch((error) => console.log(error));
+      } else {
+        alert("Ya tiene todas las materias asignadas para este año");
+      }
     },
     datosMateria(materiaId) {
       const materiaEncontrada = this.materias.find(
@@ -622,16 +731,15 @@ export default {
         .then((result) => (this.alumnos = result))
         .catch((error) => console.log("error", error));
     },
-    guardar_nota(){
-        this.insertar_nota(this.pk_nota) 
+    guardar_nota() {
+      this.insertar_nota(this.pk_nota);
     },
-    editItemNotas(item)
-    {
+    editItemNotas(item) {
       console.log(item);
       this.pk_nota = item.inscripcion_id;
 
       this.editedIndex_nota = this.alumnos.indexOf(item);
-      this.editedItem_Notas= Object.assign({}, item);
+      this.editedItem_Notas = Object.assign({}, item);
       this.dialog_notas = true;
     },
     editItem(item) {
@@ -648,7 +756,7 @@ export default {
       }, 3000);
     },
     deleteItem(item) {
-        var obj= this
+      var obj = this;
       const index = this.alumnos.indexOf(item);
       confirm("Esta seguro de eliminar este item?") &&
         this.alumnos.splice(index, 1);
@@ -680,9 +788,8 @@ export default {
       ]);
 
       promise.then((result) => console.log(result)),
-      promise.then(obj.actualiza()),
+        promise.then(obj.actualiza()),
         promise.catch((error) => console.log(error));
-      
     },
 
     close() {
@@ -761,11 +868,10 @@ export default {
           ),
         ]);
 
-        promise.then((result) => console.log(result))
-        promise.then( obj.actualiza())
+        promise.then((result) => console.log(result));
+        promise.then(obj.actualiza());
         promise.then((result) => obj.swal_put(result)),
-        promise.catch((error) => console.log(error));
-       
+          promise.catch((error) => console.log(error));
       } else {
         var obj = this;
         var myHeaders = new Headers();
@@ -801,13 +907,16 @@ export default {
           ),
         ]);
 
-        promise.then((result) => console.log(result))
-        promise.then( obj.initialize())
-          promise.then((result) => obj.swal_get(result))
-          promise.catch((error) => console.log(error));
+        promise.then((result) => console.log(result));
+        promise.then(obj.initialize());
+        promise.then((result) => obj.swal_get(result));
+        promise.catch((error) => console.log(error));
         this.actualiza();
       }
       this.close();
+      setTimeout(() => {
+        this.initialize();
+      }, 4000);
     },
   },
 };

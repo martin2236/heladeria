@@ -378,6 +378,9 @@ export default {
         this.actualiza();
       }
       this.close();
+      setTimeout(() => {
+        this.initialize();
+      }, 4000);
     },
   
   },

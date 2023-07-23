@@ -154,6 +154,12 @@
           <span>Eliminar</span>
         </v-tooltip>
       </template>
+      <template v-slot:[`item.cantidad`]="{ item }">
+              <div v-if="item.id != null">
+                {{ contarAlumnosPorCarreraId(item.id) }}
+              </div>
+              <br />
+            </template>
       <template v-slot:no-data>
         <v-btn color="primary" @click="initialize">Reset</v-btn>
       </template>
@@ -165,6 +171,7 @@
 export default {
   data: () => ({
     anios: ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
+    alumnos:[],
     facultades: [],
     nameRules: [
       (v) => !!v || "Nombre de campo requerido",
@@ -178,8 +185,9 @@ export default {
     headers: [
       { text: "Nombre", value: "nombre" },
       { text: "Fecha de apertura", value: "fecha_apertura" },
-      { text: "Facultas", value: "nombre_facultad" },
+      { text: "Facultad", value: "nombre_facultad" },
       { text: "Años de cursada", value: "anios_cursada" },
+      { text: "Cantidad de alumnos", value: "cantidad" },
       { text: "Acciones", value: "actions", sortable: false },
     ],
 
@@ -222,6 +230,32 @@ export default {
   mounted() {},
 
   methods: {
+
+    contarAlumnosPorCarreraId(carrera_id) {
+      let conteoAlumnosPorCarrera = 0;
+
+      this.alumnos.forEach((alumno) => {
+        const carreraId = carrera_id;
+       
+        if (alumno.carrera_id===carreraId) {
+          conteoAlumnosPorCarrera+= 1;
+        } 
+      });
+
+      return conteoAlumnosPorCarrera;
+    },
+    get_alumnos() {
+      var requestOptions = {
+        method: "GET",
+
+        redirect: "follow",
+      };
+      //
+      fetch(`${this.$store.state.url_api}estudiantes.php`, requestOptions)
+        .then((response) => response.json())
+        .then((result) => (this.alumnos = result))
+        .catch((error) => console.log("error", error));
+    },
     get_facultades() {
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
@@ -235,10 +269,7 @@ export default {
         redirect: "follow",
       };
       //
-      fetch(
-        `${this.$store.state.url_api}facultades.php`,
-        requestOptions
-      )
+      fetch(`${this.$store.state.url_api}facultades.php`, requestOptions)
         .then((response) => response.json())
         .then((result) => (this.facultades = result))
         .catch((error) => console.log("error", error));
@@ -255,6 +286,7 @@ export default {
         .then((result) => (this.carreras = result))
         .catch((error) => console.log("error", error));
       this.get_facultades();
+      this.get_alumnos()
     },
 
     editItem(item) {
@@ -292,10 +324,9 @@ export default {
       };
 
       var promise = Promise.race([
-        fetch(
-          `${this.$store.state.url_api}carreras.php`,
-          requestOptions
-        ).then((response) => response.text()),
+        fetch(`${this.$store.state.url_api}carreras.php`, requestOptions).then(
+          (response) => response.text()
+        ),
         new Promise((resolve, reject) =>
           setTimeout(() => reject(new Error("Timeout")), 520000)
         ),
@@ -420,6 +451,9 @@ export default {
           promise.catch((error) => console.log(error));
         this.actualiza();
       }
+      setTimeout(() => {
+        this.initialize();
+      }, 4000);
       this.close();
     },
     validate() {
