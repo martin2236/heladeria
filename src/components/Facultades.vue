@@ -143,10 +143,7 @@ export default {
         redirect: "follow",
       };
       //
-      fetch(
-        `${this.$store.state.url_api}facultades.php`,
-        requestOptions
-      )
+      fetch(`${this.$store.state.url_api}facultades.php`, requestOptions)
         .then((response) => response.json())
         .then((result) => (this.facultades = result))
         .catch((error) => console.log("error", error));
@@ -172,6 +169,7 @@ export default {
       var raw = JSON.stringify({
         opcion: "eliminar",
         id: item.id_facultad,
+        logico: 1,
       });
 
       var requestOptions = {
@@ -221,11 +219,37 @@ export default {
     },
     save() {
       if (this.editedIndex > -1) {
-      
-        this.resetValidation();
-        this.initialize();
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        var raw = JSON.stringify({
+          id_facultad: 15,
+          opcion: "actualizar",
+          nombre_facultad: this.editedItem.nombre_facultad,
+          logico: "0",
+        });
+
+        var requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: raw,
+          redirect: "follow",
+        };
+
+        var promise = Promise.race([
+          fetch(
+            `${this.$store.state.url_api}facultades.php`,
+            requestOptions
+          ).then((response) => response.text()),
+          new Promise((resolve, reject) =>
+            setTimeout(() => reject(new Error("Timeout")), 520000)
+          ),
+        ]);
+
+        promise.then((result) => console.log(result)),
+          promise.then((result) => obj.swal_put(result)),
+          promise.catch((error) => console.log(error));
       } else {
-        var obj = this;
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
@@ -244,7 +268,7 @@ export default {
 
         var promise = Promise.race([
           fetch(
-            `${this.$store.state.url_api}facultades.php"`,
+            `${this.$store.state.url_api}facultades.php`,
             requestOptions
           ).then((response) => response.text()),
           new Promise((resolve, reject) =>
@@ -252,12 +276,14 @@ export default {
           ),
         ]);
 
-        promise.then((result) => console.log(result), obj.initialize()),
-          promise.then((result) => obj.swal_get(result)),
-          promise.catch((error) => console.log(error));
-          this.resetValidation();
+        promise.then((result) => console.log(result));
+        promise.then((result) => obj.swal_get(result));
+        promise.catch((error) => console.log(error));
       }
       this.close();
+      setTimeout(() => {
+        this.initialize();
+      }, 4000);
     },
     validate() {
       this.$refs.form.validate();
